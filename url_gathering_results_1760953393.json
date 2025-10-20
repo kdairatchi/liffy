@@ -1,0 +1,832 @@
+[
+  {
+    "url": "http://api-wallet.venly.io",
+    "source": "manual",
+    "domain": "api-wallet.venly.io",
+    "parameters": {
+      "file": [
+        "test.txt"
+      ],
+      "page": [
+        "index.php"
+      ],
+      "path": [
+        "/etc/passwd"
+      ],
+      "include": [
+        "config.php"
+      ],
+      "view": [
+        "home.html"
+      ],
+      "template": [
+        "main.tpl"
+      ],
+      "doc": [
+        "readme.txt"
+      ],
+      "document": [
+        "manual.pdf"
+      ],
+      "folder": [
+        "uploads/"
+      ],
+      "dir": [
+        "/var/www/"
+      ],
+      "directory": [
+        "/tmp/"
+      ],
+      "read": [
+        "file.txt"
+      ],
+      "load": [
+        "data.json"
+      ],
+      "show": [
+        "content.html"
+      ],
+      "display": [
+        "info.php"
+      ],
+      "content": [
+        "text.txt"
+      ],
+      "data": [
+        "user.json"
+      ],
+      "src": [
+        "script.js"
+      ],
+      "source": [
+        "code.php"
+      ],
+      "search": [
+        "test"
+      ],
+      "query": [
+        "example"
+      ],
+      "q": [
+        "test"
+      ],
+      "term": [
+        "keyword"
+      ],
+      "keyword": [
+        "search"
+      ],
+      "name": [
+        "test"
+      ],
+      "title": [
+        "example"
+      ],
+      "description": [
+        "test description"
+      ],
+      "comment": [
+        "test comment"
+      ],
+      "message": [
+        "hello"
+      ],
+      "text": [
+        "test text"
+      ],
+      "input": [
+        "user input"
+      ],
+      "value": [
+        "test value"
+      ],
+      "id": [
+        "1"
+      ],
+      "user": [
+        "admin"
+      ],
+      "username": [
+        "testuser"
+      ],
+      "email": [
+        "test@example.com"
+      ],
+      "subject": [
+        "test subject"
+      ],
+      "body": [
+        "test body"
+      ],
+      "category": [
+        "general"
+      ],
+      "type": [
+        "standard"
+      ],
+      "status": [
+        "active"
+      ],
+      "order": [
+        "name"
+      ],
+      "sort": [
+        "asc"
+      ],
+      "filter": [
+        "all"
+      ],
+      "where": [
+        "id=1"
+      ],
+      "limit": [
+        "10"
+      ],
+      "offset": [
+        "0"
+      ],
+      "count": [
+        "100"
+      ],
+      "num": [
+        "5"
+      ],
+      "number": [
+        "123"
+      ]
+    },
+    "method": "GET",
+    "status_code": 403,
+    "title": null,
+    "content_type": "text/plain",
+    "response_size": 11,
+    "discovered_at": "2025-10-20 05:41:16",
+    "lfi_vulnerable": true,
+    "xss_vulnerable": true,
+    "sqli_vulnerable": true
+  },
+  {
+    "url": "https://api.arkane.network",
+    "source": "manual",
+    "domain": "api.arkane.network",
+    "parameters": {
+      "file": [
+        "test.txt"
+      ],
+      "page": [
+        "index.php"
+      ],
+      "path": [
+        "/etc/passwd"
+      ],
+      "include": [
+        "config.php"
+      ],
+      "view": [
+        "home.html"
+      ],
+      "template": [
+        "main.tpl"
+      ],
+      "doc": [
+        "readme.txt"
+      ],
+      "document": [
+        "manual.pdf"
+      ],
+      "folder": [
+        "uploads/"
+      ],
+      "dir": [
+        "/var/www/"
+      ],
+      "directory": [
+        "/tmp/"
+      ],
+      "read": [
+        "file.txt"
+      ],
+      "load": [
+        "data.json"
+      ],
+      "show": [
+        "content.html"
+      ],
+      "display": [
+        "info.php"
+      ],
+      "content": [
+        "text.txt"
+      ],
+      "data": [
+        "user.json"
+      ],
+      "src": [
+        "script.js"
+      ],
+      "source": [
+        "code.php"
+      ],
+      "search": [
+        "test"
+      ],
+      "query": [
+        "example"
+      ],
+      "q": [
+        "test"
+      ],
+      "term": [
+        "keyword"
+      ],
+      "keyword": [
+        "search"
+      ],
+      "name": [
+        "test"
+      ],
+      "title": [
+        "example"
+      ],
+      "description": [
+        "test description"
+      ],
+      "comment": [
+        "test comment"
+      ],
+      "message": [
+        "hello"
+      ],
+      "text": [
+        "test text"
+      ],
+      "input": [
+        "user input"
+      ],
+      "value": [
+        "test value"
+      ],
+      "id": [
+        "1"
+      ],
+      "user": [
+        "admin"
+      ],
+      "username": [
+        "testuser"
+      ],
+      "email": [
+        "test@example.com"
+      ],
+      "subject": [
+        "test subject"
+      ],
+      "body": [
+        "test body"
+      ],
+      "category": [
+        "general"
+      ],
+      "type": [
+        "standard"
+      ],
+      "status": [
+        "active"
+      ],
+      "order": [
+        "name"
+      ],
+      "sort": [
+        "asc"
+      ],
+      "filter": [
+        "all"
+      ],
+      "where": [
+        "id=1"
+      ],
+      "limit": [
+        "10"
+      ],
+      "offset": [
+        "0"
+      ],
+      "count": [
+        "100"
+      ],
+      "num": [
+        "5"
+      ],
+      "number": [
+        "123"
+      ]
+    },
+    "method": "GET",
+    "status_code": 403,
+    "title": null,
+    "content_type": "text/plain",
+    "response_size": 11,
+    "discovered_at": "2025-10-20 05:41:16",
+    "lfi_vulnerable": true,
+    "xss_vulnerable": true,
+    "sqli_vulnerable": true
+  },
+  {
+    "url": "http://data.mail.yahoo.com",
+    "source": "manual",
+    "domain": "data.mail.yahoo.com",
+    "parameters": {
+      "file": [
+        "test.txt"
+      ],
+      "page": [
+        "index.php"
+      ],
+      "path": [
+        "/etc/passwd"
+      ],
+      "include": [
+        "config.php"
+      ],
+      "view": [
+        "home.html"
+      ],
+      "template": [
+        "main.tpl"
+      ],
+      "doc": [
+        "readme.txt"
+      ],
+      "document": [
+        "manual.pdf"
+      ],
+      "folder": [
+        "uploads/"
+      ],
+      "dir": [
+        "/var/www/"
+      ],
+      "directory": [
+        "/tmp/"
+      ],
+      "read": [
+        "file.txt"
+      ],
+      "load": [
+        "data.json"
+      ],
+      "show": [
+        "content.html"
+      ],
+      "display": [
+        "info.php"
+      ],
+      "content": [
+        "text.txt"
+      ],
+      "data": [
+        "user.json"
+      ],
+      "src": [
+        "script.js"
+      ],
+      "source": [
+        "code.php"
+      ],
+      "search": [
+        "test"
+      ],
+      "query": [
+        "example"
+      ],
+      "q": [
+        "test"
+      ],
+      "term": [
+        "keyword"
+      ],
+      "keyword": [
+        "search"
+      ],
+      "name": [
+        "test"
+      ],
+      "title": [
+        "example"
+      ],
+      "description": [
+        "test description"
+      ],
+      "comment": [
+        "test comment"
+      ],
+      "message": [
+        "hello"
+      ],
+      "text": [
+        "test text"
+      ],
+      "input": [
+        "user input"
+      ],
+      "value": [
+        "test value"
+      ],
+      "id": [
+        "1"
+      ],
+      "user": [
+        "admin"
+      ],
+      "username": [
+        "testuser"
+      ],
+      "email": [
+        "test@example.com"
+      ],
+      "subject": [
+        "test subject"
+      ],
+      "body": [
+        "test body"
+      ],
+      "category": [
+        "general"
+      ],
+      "type": [
+        "standard"
+      ],
+      "status": [
+        "active"
+      ],
+      "order": [
+        "name"
+      ],
+      "sort": [
+        "asc"
+      ],
+      "filter": [
+        "all"
+      ],
+      "where": [
+        "id=1"
+      ],
+      "limit": [
+        "10"
+      ],
+      "offset": [
+        "0"
+      ],
+      "count": [
+        "100"
+      ],
+      "num": [
+        "5"
+      ],
+      "number": [
+        "123"
+      ]
+    },
+    "method": "GET",
+    "status_code": 404,
+    "title": "Yahoo",
+    "content_type": "text/html",
+    "response_size": 4750,
+    "discovered_at": "2025-10-20 05:41:16",
+    "lfi_vulnerable": true,
+    "xss_vulnerable": true,
+    "sqli_vulnerable": true
+  },
+  {
+    "url": "http://hub.vznkul.be",
+    "source": "manual",
+    "domain": "hub.vznkul.be",
+    "parameters": {
+      "file": [
+        "test.txt"
+      ],
+      "page": [
+        "index.php"
+      ],
+      "path": [
+        "/etc/passwd"
+      ],
+      "include": [
+        "config.php"
+      ],
+      "view": [
+        "home.html"
+      ],
+      "template": [
+        "main.tpl"
+      ],
+      "doc": [
+        "readme.txt"
+      ],
+      "document": [
+        "manual.pdf"
+      ],
+      "folder": [
+        "uploads/"
+      ],
+      "dir": [
+        "/var/www/"
+      ],
+      "directory": [
+        "/tmp/"
+      ],
+      "read": [
+        "file.txt"
+      ],
+      "load": [
+        "data.json"
+      ],
+      "show": [
+        "content.html"
+      ],
+      "display": [
+        "info.php"
+      ],
+      "content": [
+        "text.txt"
+      ],
+      "data": [
+        "user.json"
+      ],
+      "src": [
+        "script.js"
+      ],
+      "source": [
+        "code.php"
+      ],
+      "search": [
+        "test"
+      ],
+      "query": [
+        "example"
+      ],
+      "q": [
+        "test"
+      ],
+      "term": [
+        "keyword"
+      ],
+      "keyword": [
+        "search"
+      ],
+      "name": [
+        "test"
+      ],
+      "title": [
+        "example"
+      ],
+      "description": [
+        "test description"
+      ],
+      "comment": [
+        "test comment"
+      ],
+      "message": [
+        "hello"
+      ],
+      "text": [
+        "test text"
+      ],
+      "input": [
+        "user input"
+      ],
+      "value": [
+        "test value"
+      ],
+      "id": [
+        "1"
+      ],
+      "user": [
+        "admin"
+      ],
+      "username": [
+        "testuser"
+      ],
+      "email": [
+        "test@example.com"
+      ],
+      "subject": [
+        "test subject"
+      ],
+      "body": [
+        "test body"
+      ],
+      "category": [
+        "general"
+      ],
+      "type": [
+        "standard"
+      ],
+      "status": [
+        "active"
+      ],
+      "order": [
+        "name"
+      ],
+      "sort": [
+        "asc"
+      ],
+      "filter": [
+        "all"
+      ],
+      "where": [
+        "id=1"
+      ],
+      "limit": [
+        "10"
+      ],
+      "offset": [
+        "0"
+      ],
+      "count": [
+        "100"
+      ],
+      "num": [
+        "5"
+      ],
+      "number": [
+        "123"
+      ]
+    },
+    "method": "GET",
+    "status_code": 502,
+    "title": "502 Bad Gateway",
+    "content_type": "text/html",
+    "response_size": 150,
+    "discovered_at": "2025-10-20 05:41:16",
+    "lfi_vulnerable": true,
+    "xss_vulnerable": true,
+    "sqli_vulnerable": true
+  },
+  {
+    "url": "http://wallet.venly.io",
+    "source": "manual",
+    "domain": "wallet.venly.io",
+    "parameters": {
+      "file": [
+        "test.txt"
+      ],
+      "page": [
+        "index.php"
+      ],
+      "path": [
+        "/etc/passwd"
+      ],
+      "include": [
+        "config.php"
+      ],
+      "view": [
+        "home.html"
+      ],
+      "template": [
+        "main.tpl"
+      ],
+      "doc": [
+        "readme.txt"
+      ],
+      "document": [
+        "manual.pdf"
+      ],
+      "folder": [
+        "uploads/"
+      ],
+      "dir": [
+        "/var/www/"
+      ],
+      "directory": [
+        "/tmp/"
+      ],
+      "read": [
+        "file.txt"
+      ],
+      "load": [
+        "data.json"
+      ],
+      "show": [
+        "content.html"
+      ],
+      "display": [
+        "info.php"
+      ],
+      "content": [
+        "text.txt"
+      ],
+      "data": [
+        "user.json"
+      ],
+      "src": [
+        "script.js"
+      ],
+      "source": [
+        "code.php"
+      ],
+      "search": [
+        "test"
+      ],
+      "query": [
+        "example"
+      ],
+      "q": [
+        "test"
+      ],
+      "term": [
+        "keyword"
+      ],
+      "keyword": [
+        "search"
+      ],
+      "name": [
+        "test"
+      ],
+      "title": [
+        "example"
+      ],
+      "description": [
+        "test description"
+      ],
+      "comment": [
+        "test comment"
+      ],
+      "message": [
+        "hello"
+      ],
+      "text": [
+        "test text"
+      ],
+      "input": [
+        "user input"
+      ],
+      "value": [
+        "test value"
+      ],
+      "id": [
+        "1"
+      ],
+      "user": [
+        "admin"
+      ],
+      "username": [
+        "testuser"
+      ],
+      "email": [
+        "test@example.com"
+      ],
+      "subject": [
+        "test subject"
+      ],
+      "body": [
+        "test body"
+      ],
+      "category": [
+        "general"
+      ],
+      "type": [
+        "standard"
+      ],
+      "status": [
+        "active"
+      ],
+      "order": [
+        "name"
+      ],
+      "sort": [
+        "asc"
+      ],
+      "filter": [
+        "all"
+      ],
+      "where": [
+        "id=1"
+      ],
+      "limit": [
+        "10"
+      ],
+      "offset": [
+        "0"
+      ],
+      "count": [
+        "100"
+      ],
+      "num": [
+        "5"
+      ],
+      "number": [
+        "123"
+      ]
+    },
+    "method": "GET",
+    "status_code": 403,
+    "title": "Just a moment...",
+    "content_type": "text/html; charset=UTF-8",
+    "response_size": 9801,
+    "discovered_at": "2025-10-20 05:41:16",
+    "lfi_vulnerable": true,
+    "xss_vulnerable": true,
+    "sqli_vulnerable": true
+  }
+]

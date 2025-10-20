@@ -1,0 +1,11 @@
+2025-10-17 13:26:52,799 - INFO - ✓ sqry is available
+2025-10-17 13:26:52,813 - INFO - ✓ gauplus is available
+2025-10-17 13:26:52,823 - INFO - ✓ jeeves is available
+2025-10-17 13:26:52,834 - INFO - ✓ airixss is available
+2025-10-17 13:26:52,846 - INFO - ✓ qsreplace is available
+2025-10-17 13:26:53,049 - INFO - ✓ httpx is available
+2025-10-17 13:26:53,049 - INFO - 🔍 Starting target discovery mode...
+2025-10-17 13:26:53,049 - INFO - Gathering targets from Shodan with query: apache
+2025-10-17 13:27:23,083 - ERROR - sqry failed: Tool sqry timed out
+2025-10-17 13:27:23,086 - INFO - Selected 0 random targets from scope
+2025-10-17 13:27:23,086 - INFO - 🎯 Found 0 unique targets

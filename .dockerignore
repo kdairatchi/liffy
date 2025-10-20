@@ -1,0 +1,53 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Data
+data/
+config/
+
+# Test files
+tests/
+test_*.py
+
+# Backup files
+*_backup.py
+*_enhanced_backup.py
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Other
+.github/

@@ -1,0 +1,59 @@
+services:
+  liffy-enhanced:
+    build: .
+    container_name: liffy-enhanced
+    ports:
+      - "8000:8000"  # HTTP server
+      - "5000:5000"  # API server
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LIFFY_CONFIG_PATH=/app/config/liffy_config.json
+    command: ["python3", "liffy_enhanced.py", "--help"]
+    restart: unless-stopped
+    networks:
+      - liffy-network
+
+  liffy-api:
+    build: .
+    container_name: liffy-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    environment:
+      - PYTHONUNBUFFERED=1
+      - FLASK_ENV=production
+    command: ["python3", "api_mode.py"]
+    restart: unless-stopped
+    networks:
+      - liffy-network
+
+  liffy-http-server:
+    build: .
+    container_name: liffy-http-server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["python3", "http_server.py"]
+    restart: unless-stopped
+    networks:
+      - liffy-network
+
+networks:
+  liffy-network:
+    driver: bridge
+
+volumes:
+  liffy-data:
+  liffy-logs:
+  liffy-config:

@@ -1,0 +1,50 @@
+#!/bin/bash
+# Random bounty target selector for Liffy Ultimate
+# Usage: random [count] [test_mode]
+
+# Check for help flag
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    echo "Usage: random [count] [test_mode]"
+    echo ""
+    echo "Arguments:"
+    echo "  count     Number of random targets to select (default: 5)"
+    echo "  test_mode Test mode: lfi, xss, sqli, or all (default: all)"
+    echo ""
+    echo "Examples:"
+    echo "  random                    # Select 5 random targets, test all"
+    echo "  random 10                 # Select 10 random targets, test all"
+    echo "  random 5 lfi              # Select 5 random targets, test LFI only"
+    echo "  random 3 xss              # Select 3 random targets, test XSS only"
+    exit 0
+fi
+
+# Default values
+COUNT=${1:-5}
+TEST_MODE=${2:-all}
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Check if scope directory exists
+SCOPE_DIR="$HOME/targets/scope"
+if [ ! -d "$SCOPE_DIR" ]; then
+    echo "Error: Scope directory not found at $SCOPE_DIR"
+    echo "Please create the directory and add your scope files"
+    exit 1
+fi
+
+# Check if scope directory has files
+if [ -z "$(find "$SCOPE_DIR" -type f -name "*.txt" -o -name "*.md" -o -name "*.json" -o -name "*.csv" 2>/dev/null)" ]; then
+    echo "Error: No scope files found in $SCOPE_DIR"
+    echo "Please add scope files (.txt, .md, .json, .csv) to the directory"
+    exit 1
+fi
+
+echo "🎯 Liffy Ultimate - Random Target Mode"
+echo "======================================"
+echo "Scope directory: $SCOPE_DIR"
+echo "Target count: $COUNT"
+echo "Test mode: $TEST_MODE"
+echo ""
+
+# Run Liffy Ultimate with random targets
+cd "$SCRIPT_DIR"
+python3 liffy_ultimate.py --random --random-count "$COUNT" --test-mode "$TEST_MODE" --verbose

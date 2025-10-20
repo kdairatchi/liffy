@@ -6,7 +6,7 @@ __author__ = 'unicornFurnace'
 import argparse
 import sys
 import requests
-import urlparse
+from urllib.parse import urlparse
 import time
 import core
 import datetime
@@ -21,11 +21,11 @@ def main():
         print(t.cyan("""
 
     .____    .__  _____  _____
-    |    |   |__|/ ____\/ ____\__.__.
-    |    |   |  \   __\   __<   |  |
-    |    |___|  ||  |   |  |  \___  |
-    |_______ \__||__|   |__|  / ____| v1.2
-        \/                \/
+    |    |   |__|/ ____\\/ ____\\__.__.
+    |    |   |  \\   __\\   __<   |  |
+    |    |___|  ||  |   |  |  \\___  |
+    |_______ \\__||__|   |__|  / ____| v1.2
+        \\/                \\/
 
 """))
 
@@ -36,7 +36,7 @@ def main():
         sys.stdout.flush()
         sys.stdout.write("\b" * (bar_width + 1))
 
-        for w in xrange(bar_width):
+        for w in range(bar_width):
             time.sleep(0.01)
             sys.stdout.write(".")
             sys.stdout.flush()
@@ -47,18 +47,45 @@ def main():
 
     banner()
 
-    if not len(sys.argv):
-        print(t.red("[{0}] ".format(datetime.datetime.now())) + "Not Enough Arguments!")
-        print(t.red("[{0}] ".format(datetime.datetime.now())) + "Example: ./liffy.py --url \
-        http://target/files.php?file= --data\n")
-        sys.exit(0)
+    if not len(sys.argv) or (len(sys.argv) == 1 and sys.argv[0].endswith('liffy.py')):
+        print(t.cyan("[{0}] ".format(datetime.datetime.now())) + "No URL provided, using random targets from scope...")
+        print(t.cyan("[{0}] ".format(datetime.datetime.now())) + "Running random alias script...")
+        
+        # Execute the random alias script
+        import subprocess
+        import os
+        
+        try:
+            # Get the directory of the current script
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            random_script = os.path.join(script_dir, 'random')
+            
+            # Make sure the random script is executable
+            os.chmod(random_script, 0o755)
+            
+            # Execute the random script
+            result = subprocess.run([random_script], cwd=script_dir, capture_output=True, text=True)
+            
+            if result.returncode == 0:
+                print(t.green("[{0}] ".format(datetime.datetime.now())) + "Random script executed successfully!")
+                print(result.stdout)
+            else:
+                print(t.red("[{0}] ".format(datetime.datetime.now())) + "Error running random script:")
+                print(t.red(result.stderr))
+                print(t.red("[{0}] ".format(datetime.datetime.now())) + "Falling back to manual mode...")
+                print(t.red("[{0}] ".format(datetime.datetime.now())) + "Example: ./liffy.py --url http://target/files.php?file= --data")
+                sys.exit(1)
+        except Exception as e:
+            print(t.red("[{0}] ".format(datetime.datetime.now())) + f"Error executing random script: {str(e)}")
+            print(t.red("[{0}] ".format(datetime.datetime.now())) + "Example: ./liffy.py --url http://target/files.php?file= --data")
+            sys.exit(1)
 
     #---------------------------------------------------------------------------------------------------
 
     """ Command Line Arguments """
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--url", help="target url")
+    parser.add_argument("--url", help="target url (if not provided, will use random targets from scope)")
     parser.add_argument("--data", help="data technique", action="store_true")
     parser.add_argument("--input", help="input technique", action="store_true")
     parser.add_argument("--expect", help="expect technique", action="store_true")
@@ -70,6 +97,7 @@ def main():
     parser.add_argument("--nostager", help="execute payload directly, do not use stager", action="store_true")
     parser.add_argument("--relative", help="use path traversal sequences for attack", action="store_true")
     parser.add_argument("--cookies", help="session cookies")
+    parser.add_argument("--random", help="use random targets from scope instead of specific URL", action="store_true")
     args = parser.parse_args()
 
     #---------------------------------------------------------------------------------------------------
@@ -80,11 +108,46 @@ def main():
     nostager = args.nostager
     relative = args.relative
     c = args.cookies
+    use_random = args.random
 
     #---------------------------------------------------------------------------------------------------
 
-    """ Check to make sure target is actually up """
+    """ Handle random mode or specific URL """
 
+    if use_random or not url:
+        print(t.cyan("[{0}] ".format(datetime.datetime.now())) + "Using random targets from scope...")
+        print(t.cyan("[{0}] ".format(datetime.datetime.now())) + "Running random alias script...")
+        
+        # Execute the random alias script
+        import subprocess
+        import os
+        
+        try:
+            # Get the directory of the current script
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            random_script = os.path.join(script_dir, 'random')
+            
+            # Make sure the random script is executable
+            os.chmod(random_script, 0o755)
+            
+            # Execute the random script
+            result = subprocess.run([random_script], cwd=script_dir, capture_output=True, text=True)
+            
+            if result.returncode == 0:
+                print(t.green("[{0}] ".format(datetime.datetime.now())) + "Random script executed successfully!")
+                print(result.stdout)
+                sys.exit(0)
+            else:
+                print(t.red("[{0}] ".format(datetime.datetime.now())) + "Error running random script:")
+                print(t.red(result.stderr))
+                print(t.red("[{0}] ".format(datetime.datetime.now())) + "Please provide a specific URL or check your scope directory")
+                sys.exit(1)
+        except Exception as e:
+            print(t.red("[{0}] ".format(datetime.datetime.now())) + f"Error executing random script: {str(e)}")
+            print(t.red("[{0}] ".format(datetime.datetime.now())) + "Please provide a specific URL")
+            sys.exit(1)
+    
+    # If we have a specific URL, proceed with normal flow
     print(t.cyan("[{0}] ".format(datetime.datetime.now())) + "Checking Target: {0}".format(url))
     parsed = urlparse.urlsplit(url)
     domain = parsed.scheme + "://" + parsed.netloc
@@ -136,7 +199,7 @@ def main():
                 print(t.red("[{0}] ".format(datetime.datetime.now())) + "Technique Not Selected!")
                 sys.exit(0)
     except requests.HTTPError as e:
-        print(t.red("[{0}] HTTP Error!".format(datetime.datetime.now())) + str(e))
+        print(t.red("[{0}] HTTP Error: " + str(e)))
 
     #---------------------------------------------------------------------------------------------------
 

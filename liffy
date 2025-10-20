@@ -1,0 +1,21 @@
+#!/bin/bash
+# Liffy Ultimate Unified - Launcher Script
+# Quick launcher for the unified Liffy tool
+
+# Get the directory of this script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Check if Python 3 is available
+if ! command -v python3 &> /dev/null; then
+    echo "Error: Python 3 is not installed"
+    exit 1
+fi
+
+# Check if the main script exists
+if [ ! -f "$SCRIPT_DIR/liffy_ultimate_unified.py" ]; then
+    echo "Error: liffy_ultimate_unified.py not found in $SCRIPT_DIR"
+    exit 1
+fi
+
+# Run the unified tool with all arguments
+python3 "$SCRIPT_DIR/liffy_ultimate_unified.py" "$@"

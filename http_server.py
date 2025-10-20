@@ -1,16 +1,28 @@
-import SimpleHTTPServer
-import SocketServer
-import daemon
+#!/usr/bin/env python3
+
+import http.server
+import socketserver
 import os
+import threading
+import time
 
-""" Setup Server Params """
-handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-SocketServer.TCPServer.allow_reuse_address = True
-httpd = SocketServer.TCPServer(("0.0.0.0", 8000), handler)
-daemon_context = daemon.DaemonContext()
-daemon_context.files_preserve = [httpd.fileno()]
+class LiffyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory="/tmp", **kwargs)
+    
+    def log_message(self, format, *args):
+        # Suppress default logging
+        pass
 
-with daemon_context:
-    os.chdir("/tmp/")
-    httpd.handle_request()
+def start_server():
+    """Start the HTTP server for payload delivery"""
+    handler = LiffyHTTPRequestHandler
+    socketserver.TCPServer.allow_reuse_address = True
+    
+    with socketserver.TCPServer(("0.0.0.0", 8000), handler) as httpd:
+        print(f"HTTP server started on port 8000")
+        httpd.serve_forever()
+
+if __name__ == "__main__":
+    start_server()
 
